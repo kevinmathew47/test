@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NUESTRO | Manifesto</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Inter+Tight:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-tint": "#2ae500",
+                        "secondary-fixed-dim": "#76de5d",
+                        "surface-container-lowest": "#071005",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#ecbabb",
+                        "primary-fixed": "#79ff5b",
+                        "primary": "#dcffcb",
+                        "surface": "#0c1609",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#85967c",
+                        "on-primary-fixed": "#022100",
+                        "on-tertiary-container": "#7a5455",
+                        "inverse-surface": "#dae6d1",
+                        "surface-bright": "#323c2d",
+                        "on-surface-variant": "#bbccb0",
+                        "surface-container": "#182215",
+                        "secondary": "#76de5d",
+                        "surface-container-highest": "#2d3829",
+                        "background": "#0c1609",
+                        "on-tertiary-fixed-variant": "#613d3e",
+                        "tertiary": "#fff2f1",
+                        "on-primary-fixed-variant": "#095300",
+                        "on-primary": "#053900",
+                        "tertiary-fixed": "#ffdad9",
+                        "on-secondary-container": "#daffc8",
+                        "surface-container-high": "#232d1f",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-tertiary": "#472828",
+                        "on-error": "#690005",
+                        "tertiary-container": "#ffcccc",
+                        "on-primary-container": "#106e00",
+                        "inverse-on-surface": "#293325",
+                        "secondary-fixed": "#92fb76",
+                        "primary-container": "#3cf91a",
+                        "surface-dim": "#0c1609",
+                        "on-secondary": "#053900",
+                        "inverse-primary": "#106e00",
+                        "surface-container-low": "#141e11",
+                        "on-secondary-fixed": "#022100",
+                        "on-surface": "#dae6d1",
+                        "on-background": "#dae6d1",
+                        "error-container": "#93000a",
+                        "surface-variant": "#2d3829",
+                        "on-secondary-fixed-variant": "#095300",
+                        "outline-variant": "#3c4b36",
+                        "on-tertiary-fixed": "#2f1314",
+                        "secondary-container": "#148200"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter Tight"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0rem", "lg": "0rem", "xl": "0rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .grid-overlay {
+            background-size: calc(100% / 12) 100%;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px);
+        }
+        .text-neon { color: #3cf91a; }
+        .bg-neon { background-color: #3cf91a; }
+        .border-neon { border-color: #3cf91a; }
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) translateY(0px) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) translateY(-30px) rotate(5deg); }
+            100% { transform: translate(-50%, -50%) translateY(0px) rotate(0deg); }
+        }
+        .animate-float-center {
+            animation: float 10s ease-in-out infinite;
+        }
+        .text-huge { font-size: clamp(4rem, 15vw, 12rem); }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-black text-white font-body selection:bg-primary-container selection:text-black">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-black border-b-2 border-primary-container">
+<div class="text-2xl font-black italic tracking-tighter text-white">Nuestro</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-bold uppercase tracking-tighter text-primary-container underline decoration-2 underline-offset-8" href="#">Home</a>
+<a class="font-bold uppercase tracking-tighter text-white hover:text-primary-container transition-colors" href="#">Manifesto</a>
+<a class="font-bold uppercase tracking-tighter text-white hover:text-primary-container transition-colors" href="#">Works</a>
+<a class="font-bold uppercase tracking-tighter text-white hover:text-primary-container transition-colors" href="#">Services</a>
+<a class="font-bold uppercase tracking-tighter text-white hover:text-primary-container transition-colors" href="#">Lab</a>
+</div>
+<button class="bg-primary-container text-black px-4 py-2 font-black uppercase tracking-tighter text-sm hover:invert transition-all active:translate-y-1">
+            Start a riot
+        </button>
+</nav>
+<!-- Content Canvas with Grid Overlay -->
+<main class="relative min-h-screen">
+<!-- 12-Column Grid Lines -->
+<div class="fixed inset-0 pointer-events-none grid-overlay z-0 opacity-20"></div>
+<!-- Hero Header (100vh) -->
+<header class="relative h-screen w-full flex flex-col justify-center items-center text-center px-6 overflow-hidden">
+<!-- Responsive Abstract 3D Element -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] md:w-[60vw] max-w-4xl aspect-square z-0 pointer-events-none opacity-40 mix-blend-screen animate-float-center">
+<img alt="Abstract Chrome Geometric Shape" class="w-full h-full object-contain filter contrast-125 brightness-150 grayscale invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9QDU48D8sQlTZGZgmEYjF3HeAlI22h0_NNLkQuFbxPks34MW3Q--1AV266GTSlp2lK_GUe9s4JAPIkJHigaE89PKQ1TqS0e9rsl4j_ts1ODxel7DRilAEMqwu8j3-tANbyk4g3di3Wfw0ps-dLQeShXLSJj4kk5yzl3oj2qUpIX4Mb2O8jEcQZnCJSweIM9me0uc6h07-tj-b6EgRcz_Ncdy-rZRAqOaTeIYH01jC3qH1H4v35gLz4tRl1qU6fam2MShBZI3gUyt3"/>
+</div>
+<div class="relative z-10 max-w-5xl">
+<p class="text-neon font-headline uppercase tracking-[0.5em] mb-8 text-sm font-bold">The Core Philosophy</p>
+<h1 class="text-huge font-black font-headline leading-[0.85] uppercase tracking-tighter mb-4">
+                THE<br/>MANIFESTO
+            </h1>
+<div class="w-24 h-1 bg-white mx-auto mt-12 opacity-30"></div>
+</div>
+</header>
+<div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-24">
+<!-- Numbered List (Rule 01 - 05) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-y-32">
+<!-- Rule 01 -->
+<section class="md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<div class="md:col-span-2">
+<span class="text-7xl md:text-9xl font-black font-headline text-neon leading-none">01</span>
+</div>
+<div class="md:col-span-10 border-l border-white/10 pl-8 md:pl-12">
+<h2 class="text-4xl md:text-7xl font-bold font-headline uppercase tracking-tighter mb-8 leading-none">NO TEMPLATES. NO COMPROMISES.</h2>
+<p class="text-xl md:text-2xl text-on-surface-variant font-light leading-relaxed max-w-3xl">
+                        We don't recycle ideas. Every pixel, every line of code, and every strategy is forged from absolute zero. If it's been seen before, it's not ours. We reject the safety of the known.
+                    </p>
+</div>
+</section>
+<!-- Rule 02 -->
+<section class="md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<div class="md:col-span-2">
+<span class="text-7xl md:text-9xl font-black font-headline text-neon leading-none">02</span>
+</div>
+<div class="md:col-span-10 border-l border-white/10 pl-8 md:pl-12">
+<h2 class="text-4xl md:text-7xl font-bold font-headline uppercase tracking-tighter mb-8 leading-none">FUNCTION DICTATES FORM.</h2>
+<p class="text-xl md:text-2xl text-on-surface-variant font-light leading-relaxed max-w-3xl">
+                        Aesthetics without utility is just decoration. We build systems that work under pressure. Beauty is the byproduct of a solved problem, never the starting point.
+                    </p>
+</div>
+</section>
+<!-- Rule 03 -->
+<section class="md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<div class="md:col-span-2">
+<span class="text-7xl md:text-9xl font-black font-headline text-neon leading-none">03</span>
+</div>
+<div class="md:col-span-10 border-l border-white/10 pl-8 md:pl-12">
+<h2 class="text-4xl md:text-7xl font-bold font-headline uppercase tracking-tighter mb-8 leading-none">MEDIOCRITY IS A DISEASE.</h2>
+<p class="text-xl md:text-2xl text-on-surface-variant font-light leading-relaxed max-w-3xl">
+                        Good enough is the enemy of great. We operate on the edge of discomfort. If it doesn't challenge the status quo, it is a waste of energy. We aim for the throat.
+                    </p>
+</div>
+</section>
+<!-- Rule 04 -->
+<section class="md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<div class="md:col-span-2">
+<span class="text-7xl md:text-9xl font-black font-headline text-neon leading-none">04</span>
+</div>
+<div class="md:col-span-10 border-l border-white/10 pl-8 md:pl-12">
+<h2 class="text-4xl md:text-7xl font-bold font-headline uppercase tracking-tighter mb-8 leading-none">SPEED IS A FEATURE.</h2>
+<p class="text-xl md:text-2xl text-on-surface-variant font-light leading-relaxed max-w-3xl">
+                        Perfection is an excuse for procrastination. We move with violent intent. Rapid iteration and uncompromising delivery are the markers of our process.
+                    </p>
+</div>
+</section>
+<!-- Rule 05 -->
+<section class="md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<div class="md:col-span-2">
+<span class="text-7xl md:text-9xl font-black font-headline text-neon leading-none">05</span>
+</div>
+<div class="md:col-span-10 border-l border-white/10 pl-8 md:pl-12">
+<h2 class="text-4xl md:text-7xl font-bold font-headline uppercase tracking-tighter mb-8 leading-none">IF IT DOESN'T BITE BACK, IT'S NOT READY.</h2>
+<p class="text-xl md:text-2xl text-on-surface-variant font-light leading-relaxed max-w-3xl">
+                        Passive design is dead design. Our work demands attention, forces interaction, and leaves a scar. We design for the bold, the loud, and the uncompromising.
+                    </p>
+</div>
+</section>
+</div>
+<!-- Visual Break/Bento Element Swapped from SCREEN_52 -->
+<section class="mt-48 mb-24">
+<div class="grid grid-cols-12 gap-4 border border-white/10 p-1 bg-surface-container">
+<div class="col-span-12 lg:col-span-8 h-[600px] relative overflow-hidden bg-black">
+<img alt="Abstract chrome landscape" class="w-full h-full object-cover grayscale brightness-50 contrast-125 opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJSMExPfA6LFZdpSGBYk0zMYT3Q-aDSyYdk_iko95z3VU0-zm-TV9WNMjmnlJji_4XxXgvWmgux0H-Xd4R9yZKnzmGR06XQFTVT-5hL_Ug1pdATS-7wFyRPxgb-1WrHVb2sUH2e6wJNETMX6t-pPdfMhLjYAOPDkC01JLXEPbJnCVF1k-6OWfF3UU4FeEGq1zqgUGbLOI5mZ0QoV5MhYk84JmTkRvU_qNbpzVZP4LkE-IugcuhW0fujAdKLEQkuolXO1po4Fq1jScw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+<div class="absolute bottom-12 left-12 max-w-md">
+<span class="font-headline text-primary tracking-[0.3em] uppercase text-[10px] mb-4 block">System Tease / v4.0</span>
+<h3 class="font-headline text-5xl font-black uppercase tracking-tighter leading-[0.9]">PRECISION<br/>MEETS<br/>POETRY.</h3>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-4">
+<div class="flex-1 bg-surface-container-high p-8 flex flex-col justify-end">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">terminal</span>
+<h4 class="font-headline text-xl font-bold uppercase mb-2">RAW OUTPUT</h4>
+<p class="font-body text-sm text-on-surface-variant">Access the underlying structure. No layers hidden, no secrets kept. Just raw, unadulterated performance.</p>
+</div>
+<div class="flex-1 bg-primary-container p-8 flex flex-col justify-end">
+<span class="material-symbols-outlined text-black text-4xl mb-4">bolt</span>
+<h4 class="font-headline text-xl font-bold uppercase text-black mb-2">JOIN THE REBELLION</h4>
+<p class="font-body text-sm text-black/80">Submit your project for a radical digital audit. We only take on what we can transform.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-black w-full py-12 px-6 border-t border-white/20">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 max-w-7xl mx-auto items-end">
+<div class="md:col-span-4">
+<div class="text-[#3cf91a] font-bold font-headline text-3xl mb-4 tracking-tighter">NUESTRO</div>
+<p class="font-['Inter_Tight'] text-xs uppercase tracking-widest text-white/50">©2024 NUESTRO AGENC¥</p>
+</div>
+<div class="md:col-span-8 flex flex-wrap gap-8 md:justify-end font-['Inter_Tight'] text-xs uppercase tracking-widest">
+<a class="text-white/50 hover:text-[#3cf91a] underline underline-offset-4 transition-opacity" href="#">Instagram</a>
+<a class="text-white/50 hover:text-[#3cf91a] underline underline-offset-4 transition-opacity" href="#">LinkedIn</a>
+<a class="text-white/50 hover:text-[#3cf91a] underline underline-offset-4 transition-opacity" href="#">Twitter</a>
+<a class="text-white/50 hover:text-[#3cf91a] underline underline-offset-4 transition-opacity" href="#">Privacy</a>
+</div>
+</div>
+</footer>
+</body></html>
