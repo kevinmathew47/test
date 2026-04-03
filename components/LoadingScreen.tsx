@@ -163,20 +163,6 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
     }
   }, [progress, handleComplete]);
 
-  const letterVariants = {
-    hidden: { opacity: 0, y: 30, rotateX: -90 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      transition: {
-        delay: i * 0.08,
-        duration: 0.6,
-        ease: [0.215, 0.61, 0.355, 1],
-      },
-    }),
-  };
-
   const brandLetters = "NUESTRO".split("");
 
   return (
@@ -220,10 +206,16 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
                 {brandLetters.map((letter, i) => (
                   <motion.span
                     key={i}
-                    custom={i}
-                    variants={letterVariants}
-                    initial="hidden"
-                    animate={phase !== "ring" ? "visible" : "hidden"}
+                    initial={{ opacity: 0, y: 30, rotateX: -90 }}
+                    animate={phase !== "ring"
+                      ? { opacity: 1, y: 0, rotateX: 0 }
+                      : { opacity: 0, y: 30, rotateX: -90 }
+                    }
+                    transition={{
+                      delay: i * 0.08,
+                      duration: 0.6,
+                      ease: [0.215, 0.61, 0.355, 1],
+                    }}
                     className="text-2xl md:text-3xl font-black tracking-[0.2em] text-white uppercase"
                     style={{ display: "inline-block" }}
                   >
