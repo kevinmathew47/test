@@ -7,8 +7,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata = {
-  title: "NUESTRO | START A RIOT",
-  description: "Brutalist design and high-performance engineering. No templates. No compromises.",
+  title: "NUESTRO | Pull the Future Forward",
+  description: "Exponential foresight, intelligent iteration, and full-stack support. Forging digital experiences that pull the future forward.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
