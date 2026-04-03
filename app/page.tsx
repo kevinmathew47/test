@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
 import CustomCursor from "@/components/CustomCursor";
-import ParticleField from "@/components/ParticleField";
+import FluidParticlesBackground from "@/components/FluidParticlesBackground";
 import ScrollProgress from "@/components/ScrollProgress";
 import MagneticButton from "@/components/MagneticButton";
 import TextReveal from "@/components/TextReveal";
@@ -108,7 +108,7 @@ export default function Home() {
       className="min-h-screen bg-[var(--background)] text-[var(--on-background)] font-[var(--font-inter)] overflow-x-hidden"
     >
       <div className="grain-overlay" />
-      <ParticleField />
+      <FluidParticlesBackground />
       <CustomCursor />
       <ScrollProgress />
       <Navbar />
