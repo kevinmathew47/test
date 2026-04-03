@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --neon-green: #39FF14;
-  --primary-container: #3cf91a;
-  --background: #060905;
-  --foreground: #eef2eb;
+  --neon-green: #bfff00;
+  --primary-container: #bfff00;
+  --background: #000000;
+  --foreground: #ffffff;
 }
 
 @theme {
@@ -62,6 +62,51 @@ body {
 
 .glow-border:hover::before {
   opacity: 1;
+}
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+}
+
+.crt-text {
+  position: relative;
+  display: inline-block;
+}
+
+.crt-text::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  z-index: 2;
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+.wm-start-btn {
+  background-color: var(--neon-green);
+  color: black;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 1rem 3rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  font-size: 1.25rem;
+}
+.wm-start-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(191, 255, 0, 0.4);
 }
 
 /* Hide Scrollbar */
