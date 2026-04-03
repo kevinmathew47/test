@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 export default function Home() {
   const [formStatus, setFormStatus] = useState<string | null>(null);
@@ -29,7 +29,7 @@ export default function Home() {
     }
   };
 
-  const fadeUpVariant = {
+  const fadeUpVariant: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
   };
