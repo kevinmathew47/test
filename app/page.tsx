@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -12,7 +12,15 @@ import ScrollProgress from "@/components/ScrollProgress";
 import MagneticButton from "@/components/MagneticButton";
 import TextReveal from "@/components/TextReveal";
 
-function AnimatedCounter({ value, suffix, inView }: { value: number; suffix: string; inView: boolean }) {
+function AnimatedCounter({
+  value,
+  suffix,
+  inView,
+}: {
+  value: number;
+  suffix: string;
+  inView: boolean;
+}) {
   const [display, setDisplay] = useState(0);
   const hasRun = useRef(false);
 
@@ -21,14 +29,22 @@ function AnimatedCounter({ value, suffix, inView }: { value: number; suffix: str
     let start = 0;
     const step = () => {
       start += Math.ceil(value / 40);
-      if (start >= value) { setDisplay(value); return; }
+      if (start >= value) {
+        setDisplay(value);
+        return;
+      }
       setDisplay(start);
       requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   }
 
-  return <>{display}<span className="text-[var(--neon-green)]">{suffix}</span></>;
+  return (
+    <>
+      {display}
+      <span className="text-[var(--primary-fixed)]">{suffix}</span>
+    </>
+  );
 }
 
 export default function Home() {
@@ -45,6 +61,22 @@ export default function Home() {
   });
   const heroY = useTransform(heroScroll, [0, 1], ["0%", "50%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.6], [1, 0]);
+
+  // Track mouse for grid background
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      document.documentElement.style.setProperty(
+        "--mouse-x",
+        `${(e.clientX / window.innerWidth) * 100}%`
+      );
+      document.documentElement.style.setProperty(
+        "--mouse-y",
+        `${(e.clientY / window.innerHeight) * 100}%`
+      );
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -73,7 +105,7 @@ export default function Home() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="min-h-screen bg-black text-white font-sans"
+      className="min-h-screen bg-[var(--background)] text-[var(--on-background)] font-[var(--font-inter)] overflow-x-hidden"
     >
       <div className="grain-overlay" />
       <ParticleField />
@@ -81,246 +113,156 @@ export default function Home() {
       <ScrollProgress />
       <Navbar />
 
-      <main className="relative z-10">
+      <main className="relative z-10 pt-24">
         {/* ============================================ */}
-        {/* HERO — Asymmetric, editorial, bordered */}
+        {/* HERO — Brutalist, full-viewport, with image */}
         {/* ============================================ */}
-        <section id="hero" ref={heroRef} className="min-h-screen relative border-b border-[var(--border-color)]">
+        <section
+          id="hero"
+          ref={heroRef}
+          className="relative min-h-screen flex flex-col justify-center px-8 overflow-hidden"
+        >
+          <div className="absolute inset-0 grid-bg -z-10 opacity-40" />
+          <div className="kinetic-overlay" />
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-[var(--surface-container-low)]/50 -z-10 border-l-4 border-black/20" />
+
           <motion.div
             style={{ y: heroY, opacity: heroOpacity }}
-            className="min-h-screen flex flex-col justify-end pb-12 md:pb-20 px-6 md:px-12 relative"
+            className="max-w-7xl mx-auto w-full grid grid-cols-12 gap-4"
           >
-            {/* Vertical side label */}
-            <div className="hidden lg:block absolute left-6 top-1/2 -translate-y-1/2 vertical-text editorial-label opacity-40">
-              NUESTRO AGENCY — EST. 2023
-            </div>
-
-            {/* Right side decorative number */}
-            <div className="hidden lg:block absolute right-8 bottom-20 text-[20rem] font-black text-white/[0.02] leading-none select-none">
-              01
-            </div>
-
-            <div className="max-w-[90rem] mx-auto w-full pt-32">
-              {/* Small label */}
+            {/* Headline */}
+            <div className="col-span-12 md:col-span-10">
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="editorial-label mb-8 flex items-center gap-3"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
               >
-                <div className="w-8 h-[1px] bg-[var(--neon-green)]" />
-                Digital Agency / Creative Studio
-              </motion.div>
-
-              {/* Main headline — asymmetric, left-aligned, massive */}
-              <div className="mb-12">
-                <TextReveal className="display-huge text-white" delay={0.4}>
+                <TextReveal className="display-huge text-white" delay={0.3}>
                   FORGING
                 </TextReveal>
-                <TextReveal className="display-huge text-white" delay={0.5}>
+                <TextReveal className="display-huge text-white" delay={0.4}>
                   DIGITAL
                 </TextReveal>
-                <TextReveal className="display-huge text-[var(--neon-green)]" delay={0.6}>
+                <TextReveal
+                  className="display-huge text-[var(--primary-fixed)]"
+                  delay={0.5}
+                >
                   FUTURES
                 </TextReveal>
-              </div>
-
-              {/* Bottom row — bordered container with info */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 0.8 }}
-                className="flex flex-col md:flex-row items-start md:items-end gap-8 md:gap-16"
-              >
-                {/* Description box */}
-                <div className="max-w-md border border-[var(--border-color)] p-6 md:p-8 relative">
-                  <div className="absolute -top-3 left-4 bg-black px-2 editorial-label">About</div>
-                  <p className="text-sm md:text-base font-medium leading-relaxed text-white/70">
-                    We build digital products that don&apos;t just enter markets — they define them.
-                    Vision matters. Velocity wins. We create the infrastructure for scale.
-                  </p>
-                </div>
-
-                {/* CTA */}
-                <MagneticButton href="#contact" strength={0.3}>
-                  <span className="inline-flex items-center gap-4 bg-[var(--neon-green)] text-black px-8 md:px-12 py-4 md:py-5 font-bold text-sm tracking-[0.15em] uppercase hover:bg-white transition-colors">
-                    Start a project
-                    <span className="text-xl">→</span>
-                  </span>
-                </MagneticButton>
               </motion.div>
             </div>
 
-            {/* Scroll indicator */}
+            {/* Subtitle + CTA */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.5 }}
-              className="absolute bottom-6 right-8 flex flex-col items-center gap-2"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              className="col-span-12 md:col-span-6 flex flex-col items-start gap-8 mt-8"
             >
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="w-[1px] h-8 bg-gradient-to-b from-[var(--neon-green)]/60 to-transparent"
-              />
-              <span className="text-[9px] font-mono tracking-widest text-white/20 uppercase">Scroll</span>
+              <p className="text-xl md:text-2xl font-medium tracking-tight text-[var(--on-surface-variant)] max-w-xl">
+                Digital Agency / Creative Studio. We build digital products that
+                don&apos;t just enter markets — they define them.
+              </p>
+              <MagneticButton href="#contact" strength={0.3}>
+                <span className="group relative inline-flex items-center gap-4 bg-[var(--primary-container)] text-[var(--on-primary-container)] px-10 py-6 border-4 border-black font-black text-xl uppercase hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_#000000] transition-all duration-200">
+                  Start a project →
+                </span>
+              </MagneticButton>
+            </motion.div>
+
+            {/* Hero Image */}
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 1 }}
+              className="hidden md:block col-span-12 mt-20"
+            >
+              <div className="w-full h-[400px] bg-[var(--surface-container-high)] border-4 border-black relative overflow-hidden group">
+                <Image
+                  src="/assets/hero.png"
+                  width={1920}
+                  height={800}
+                  alt="high-tech workspace"
+                  className="w-full h-full object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-[var(--primary-container)]/10 mix-blend-multiply pointer-events-none" />
+              </div>
             </motion.div>
           </motion.div>
         </section>
 
         {/* ============================================ */}
-        {/* HORIZONTAL MARQUEE */}
+        {/* KINETIC TICKER — Solid green marquee */}
         {/* ============================================ */}
-        <div className="py-6 overflow-hidden border-b border-[var(--border-color)] bg-[var(--neon-green)]">
+        <section className="bg-[var(--primary-container)] border-y-4 border-black py-4 overflow-hidden">
           <motion.div
-            animate={{ x: [0, -1000] }}
-            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            className="whitespace-nowrap text-black font-black text-lg md:text-xl tracking-[0.2em] uppercase"
+            animate={{ x: [0, -2000] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="whitespace-nowrap font-black text-4xl md:text-6xl text-black uppercase tracking-tighter"
           >
-            {Array(8).fill("DESIGN • DEVELOP • DEPLOY • DISRUPT • ").join("")}
+            {Array(10)
+              .fill("DESIGN • DEVELOP • DEPLOY • DISRUPT • ")
+              .join("")}
           </motion.div>
-        </div>
-
-        {/* ============================================ */}
-        {/* MANIFESTO — Bordered, asymmetric layout */}
-        {/* ============================================ */}
-        <section id="manifesto" className="border-b border-[var(--border-color)]">
-          <div className="flex flex-col lg:flex-row">
-            {/* Left sidebar label */}
-            <div className="hidden lg:flex w-20 border-r border-[var(--border-color)] items-center justify-center shrink-0">
-              <span className="vertical-text editorial-label opacity-60">Manifesto</span>
-            </div>
-
-            {/* Content */}
-            <div className="flex-1 p-8 md:p-16 lg:p-24">
-              <div className="max-w-5xl">
-                <motion.div
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "3rem" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                  className="h-[2px] bg-[var(--neon-green)] mb-8"
-                />
-                <TextReveal className="display-medium text-white mb-12">
-                  We spot digital trends before they permeate the industry.
-                </TextReveal>
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4 }}
-                  className="text-xl md:text-3xl font-bold text-[var(--neon-green)] max-w-3xl leading-snug mb-12 uppercase"
-                >
-                  Some call it foresight. We call it pattern recognition at scale.
-                </motion.p>
-
-                <MagneticButton strength={0.25}>
-                  <div className="inline-flex items-center gap-4 text-sm font-bold tracking-[0.15em] uppercase text-white/60 hover:text-[var(--neon-green)] transition-colors hover-line pb-1">
-                    Explore our philosophy
-                    <span className="text-lg">→</span>
-                  </div>
-                </MagneticButton>
-              </div>
-            </div>
-
-            {/* Right decorative */}
-            <div className="hidden lg:block w-32 border-l border-[var(--border-color)] relative">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[8rem] font-black text-white/[0.03] select-none">
-                N
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* ============================================ */}
-        {/* STATS — Bordered grid */}
+        {/* MANIFESTO — About section with stats */}
         {/* ============================================ */}
-        <section ref={statsRef} className="border-b border-[var(--border-color)]">
-          <div className="grid grid-cols-2 md:grid-cols-4">
-            {[
-              { value: 50, suffix: "+", label: "Projects" },
-              { value: 3, suffix: "+", label: "Years" },
-              { value: 100, suffix: "%", label: "Satisfaction" },
-              { value: 24, suffix: "/7", label: "Support" },
-            ].map((stat, i) => (
+        <section
+          id="manifesto"
+          className="py-32 px-8 bg-[var(--surface)] relative overflow-hidden"
+        >
+          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-12 relative z-10">
+            {/* Left text */}
+            <div className="col-span-12 md:col-span-7">
               <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={statsInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className={`p-8 md:p-12 text-center ${i < 3 ? "border-r border-[var(--border-color)]" : ""} ${i < 2 ? "border-b md:border-b-0 border-[var(--border-color)]" : ""}`}
-              >
-                <div className="text-4xl md:text-6xl font-black tracking-tighter mb-2">
-                  <AnimatedCounter value={stat.value} suffix={stat.suffix} inView={statsInView} />
+                initial={{ width: 0 }}
+                whileInView={{ width: "3rem" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="h-[2px] bg-[var(--primary-fixed)] mb-6"
+              />
+              <h2 className="editorial-label mb-6">Manifesto / 001</h2>
+              <TextReveal className="display-medium text-white mb-12">
+                We spot digital trends before they permeate the industry. Some
+                call it foresight. We call it pattern recognition at scale.
+              </TextReveal>
+              <MagneticButton strength={0.25}>
+                <div className="inline-flex items-center gap-4 font-black text-lg border-b-4 border-[var(--primary-fixed)] pb-2 hover:text-[var(--primary-fixed)] transition-colors uppercase">
+                  Explore our philosophy →
                 </div>
-                <div className="editorial-label opacity-50">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* ============================================ */}
-        {/* SERVICES — Editorial grid with side label */}
-        {/* ============================================ */}
-        <section id="services" className="border-b border-[var(--border-color)]">
-          <div className="flex flex-col lg:flex-row">
-            {/* Side label */}
-            <div className="hidden lg:flex w-20 border-r border-[var(--border-color)] items-center justify-center shrink-0">
-              <span className="vertical-text editorial-label opacity-60">Services</span>
+              </MagneticButton>
             </div>
 
-            <div className="flex-1">
-              {/* Header row */}
-              <div className="p-8 md:p-12 lg:px-16 lg:py-12 border-b border-[var(--border-color)]">
-                <TextReveal className="display-large">
-                  CORE
-                </TextReveal>
-                <TextReveal className="display-large text-[var(--neon-green)]" delay={0.15}>
-                  INFRASTRUCTURE
-                </TextReveal>
-              </div>
-
-              {/* Service cards — full-width stacked with borders */}
+            {/* Stats grid */}
+            <div
+              ref={statsRef}
+              className="col-span-12 md:col-span-5 grid grid-cols-2 gap-4"
+            >
               {[
-                { num: "01", title: "NEXT-GEN DESIGN", desc: "Interfaces built for exponential markets. We prioritize impact, clarity, and raw usability to establish category kings.", tags: ["UI/UX", "BRANDING", "PROTOTYPING"] },
-                { num: "02", title: "ROBUST ARCHITECTURE", desc: "Custom architectures built to survive. Resilient data flows and systems engineered for maximum performance.", tags: ["WEB", "MOBILE", "API"] },
-                { num: "03", title: "INTELLIGENT ITERATION", desc: "Instant scale. Zero friction. Ruthless focus on product-market fit and rapid market entry.", tags: ["STRATEGY", "LAUNCH", "GROWTH"] },
-              ].map((service, i) => (
+                { value: 50, suffix: "+", label: "Projects", prefix: "N " },
+                { value: 3, suffix: "+", label: "Years", prefix: "" },
+                { value: 100, suffix: "%", label: "Satisfaction", prefix: "" },
+                { value: 24, suffix: "/7", label: "Support", prefix: "" },
+              ].map((stat, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="group border-b border-[var(--border-color)] hover:bg-[var(--neon-green)]/[0.03] transition-colors duration-500"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={statsInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="bg-[var(--surface-container-low)] p-8 border-4 border-black hover:border-[var(--primary-fixed)] transition-colors"
                 >
-                  <div className="flex flex-col md:flex-row md:items-center gap-6 p-8 md:p-12 lg:px-16">
-                    {/* Number */}
-                    <div className="text-5xl md:text-7xl font-black text-white/10 group-hover:text-[var(--neon-green)]/30 transition-colors w-24 shrink-0">
-                      {service.num}
-                    </div>
-
-                    {/* Title & Desc */}
-                    <div className="flex-1">
-                      <h4 className="text-2xl md:text-3xl font-black tracking-tight mb-3 group-hover:text-[var(--neon-green)] transition-colors uppercase">
-                        {service.title}
-                      </h4>
-                      <p className="text-sm md:text-base text-white/50 leading-relaxed max-w-xl">
-                        {service.desc}
-                      </p>
-                    </div>
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2 md:flex-col md:items-end shrink-0">
-                      {service.tags.map((tag) => (
-                        <span key={tag} className="card-tag">{tag}</span>
-                      ))}
-                    </div>
-
-                    {/* Arrow */}
-                    <div className="text-white/20 group-hover:text-[var(--neon-green)] transition-colors text-2xl hidden md:block">
-                      →
-                    </div>
+                  <div className="text-5xl font-black text-[var(--primary-fixed)]">
+                    {stat.prefix}
+                    <AnimatedCounter
+                      value={stat.value}
+                      suffix={stat.suffix}
+                      inView={statsInView}
+                    />
+                  </div>
+                  <div className="text-xs font-bold uppercase tracking-widest mt-2">
+                    {stat.label}
                   </div>
                 </motion.div>
               ))}
@@ -329,79 +271,242 @@ export default function Home() {
         </section>
 
         {/* ============================================ */}
-        {/* WORKS — Bordered editorial grid */}
+        {/* SERVICES — Core Infrastructure */}
         {/* ============================================ */}
-        <section id="works" className="border-b border-[var(--border-color)]">
-          <div className="flex flex-col lg:flex-row">
-            {/* Side label */}
-            <div className="hidden lg:flex w-20 border-r border-[var(--border-color)] items-center justify-center shrink-0">
-              <span className="vertical-text editorial-label opacity-60">Portfolio</span>
+        <section
+          id="services"
+          className="py-32 px-8 bg-[var(--surface-container-low)]"
+        >
+          <div className="max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+              <div>
+                <TextReveal className="display-large">CORE</TextReveal>
+                <TextReveal
+                  className="display-large text-[var(--primary-fixed)]"
+                  delay={0.15}
+                >
+                  INFRASTRUCTURE
+                </TextReveal>
+              </div>
+              <p className="max-w-md text-[var(--on-surface-variant)] font-medium text-lg italic">
+                Vision matters. Velocity wins. We create the infrastructure for
+                scale.
+              </p>
             </div>
 
-            <div className="flex-1">
-              {/* Header */}
-              <div className="p-8 md:p-12 lg:px-16 lg:py-12 border-b border-[var(--border-color)] flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-                <div>
-                  <TextReveal className="display-large">SELECTED</TextReveal>
-                  <TextReveal className="display-large text-[var(--neon-green)]" delay={0.15}>WORK</TextReveal>
-                </div>
-                <MagneticButton href="/works" strength={0.3}>
-                  <span className="inline-flex items-center gap-3 text-sm font-bold tracking-[0.15em] uppercase text-white/50 hover:text-[var(--neon-green)] transition-colors hover-line pb-1">
-                    View Archive →
+            {/* Service cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-4 border-black overflow-hidden">
+              {[
+                {
+                  num: "01",
+                  title: "Next-Gen Design",
+                  tags: "UI/UX, Branding, Prototyping",
+                  icon: "arrow_forward",
+                },
+                {
+                  num: "02",
+                  title: "Robust Architecture",
+                  tags: "Web, Mobile, API",
+                  icon: "layers",
+                },
+                {
+                  num: "03",
+                  title: "Intelligent Iteration",
+                  tags: "Strategy, Launch, Growth",
+                  icon: "bolt",
+                },
+              ].map((service, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: i * 0.15 }}
+                  className={`infrastructure-card p-12 bg-[var(--surface)] hover:bg-[var(--surface-container-highest)] transition-colors group ${
+                    i < 2
+                      ? "border-b-4 md:border-b-0 md:border-r-4 border-black"
+                      : ""
+                  }`}
+                >
+                  <div className="text-[var(--primary-fixed)] font-black mb-12">
+                    {service.num}
+                  </div>
+                  <h3 className="text-3xl font-black mb-6 uppercase tracking-tighter group-hover:text-[var(--primary-fixed)] transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-[var(--on-surface-variant)] mb-8 uppercase text-sm font-bold tracking-widest">
+                    {service.tags}
+                  </p>
+                  <span className="material-symbols-outlined text-5xl group-hover:translate-x-4 transition-transform card-icon">
+                    {service.icon}
                   </span>
-                </MagneticButton>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================ */}
+        {/* PORTFOLIO — Selected Work */}
+        {/* ============================================ */}
+        <section id="works" className="py-32 px-8 bg-[var(--surface)]">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-20">
+              <TextReveal className="display-large">SELECTED</TextReveal>
+              <TextReveal
+                className="display-large text-[var(--primary-fixed)]"
+                delay={0.15}
+              >
+                WORK
+              </TextReveal>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Project 01 */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col gap-6 group"
+              >
+                <Link href="/works#void" className="block">
+                  <div className="aspect-[4/5] bg-[var(--surface-container-high)] border-4 border-black overflow-hidden relative">
+                    <Image
+                      src="/assets/void.png"
+                      width={800}
+                      height={1000}
+                      alt="Void Protocol"
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
+                    />
+                    <div className="absolute top-4 left-4 bg-[var(--primary-container)] text-black px-4 py-1 font-black uppercase text-xs">
+                      Fintech
+                    </div>
+                    <div className="absolute inset-0 bg-[var(--primary-container)]/20 opacity-0 group-hover:opacity-100 transition-opacity mix-blend-overlay" />
+                  </div>
+                  <div className="flex justify-between items-start mt-6">
+                    <div>
+                      <h4 className="text-4xl font-black tracking-tighter uppercase group-hover:text-[var(--primary-fixed)] transition-colors">
+                        VOID PROTOCOL
+                      </h4>
+                      <p className="text-[var(--on-surface-variant)] font-medium mt-1">
+                        Decentralized Asset Management
+                      </p>
+                    </div>
+                    <span className="material-symbols-outlined text-4xl group-hover:text-[var(--primary-fixed)] transition-colors">
+                      north_east
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+
+              {/* Project 02 */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex flex-col gap-6 group mt-0 md:mt-24"
+              >
+                <Link href="/works#cyber" className="block">
+                  <div className="aspect-[4/5] bg-[var(--surface-container-high)] border-4 border-black overflow-hidden relative">
+                    <Image
+                      src="/assets/cyber.png"
+                      width={800}
+                      height={1000}
+                      alt="Cyber-Skins"
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
+                    />
+                    <div className="absolute top-4 left-4 bg-[var(--primary-container)] text-black px-4 py-1 font-black uppercase text-xs">
+                      E-Commerce
+                    </div>
+                    <div className="absolute inset-0 bg-[var(--primary-container)]/20 opacity-0 group-hover:opacity-100 transition-opacity mix-blend-overlay" />
+                  </div>
+                  <div className="flex justify-between items-start mt-6">
+                    <div>
+                      <h4 className="text-4xl font-black tracking-tighter uppercase group-hover:text-[var(--primary-fixed)] transition-colors">
+                        CYBER-SKINS
+                      </h4>
+                      <p className="text-[var(--on-surface-variant)] font-medium mt-1">
+                        Next-Gen Apparel Interface
+                      </p>
+                    </div>
+                    <span className="material-symbols-outlined text-4xl group-hover:text-[var(--primary-fixed)] transition-colors">
+                      north_east
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* View Archive */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mt-20 flex justify-center"
+            >
+              <MagneticButton href="/works" strength={0.3}>
+                <span className="inline-flex items-center gap-4 bg-[var(--surface)] text-white px-12 py-6 border-4 border-white font-black text-xl uppercase hover:bg-white hover:text-black transition-all hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_#000000]">
+                  View Archive →
+                </span>
+              </MagneticButton>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ============================================ */}
+        {/* PROCESS — Step-by-step accordion */}
+        {/* ============================================ */}
+        <section className="py-32 px-8 bg-[var(--surface-container-lowest)] border-y-4 border-black relative overflow-hidden">
+          <div className="absolute inset-0 grid-bg -z-10 opacity-20" />
+          <div className="kinetic-overlay" />
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+              {/* Sticky title */}
+              <div className="md:col-span-4">
+                <div className="sticky top-32">
+                  <TextReveal className="display-large">THE</TextReveal>
+                  <TextReveal
+                    className="display-large text-[var(--primary-fixed)]"
+                    delay={0.15}
+                  >
+                    PROCESS
+                  </TextReveal>
+                </div>
               </div>
 
-              {/* Works grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2">
+              {/* Steps */}
+              <div className="md:col-span-8 flex flex-col">
                 {[
-                  { href: "/works#void", img: "/assets/void.png", alt: "Void Protocol", tag: "FINTECH", title: "VOID PROTOCOL", num: "01" },
-                  { href: "/works#cyber", img: "/assets/cyber.png", alt: "Cyber Skins", tag: "E-COMMERCE", title: "CYBER-SKINS", num: "02" },
-                ].map((work, i) => (
+                  { step: "Discovery", icon: "search" },
+                  { step: "Blueprint", icon: "architecture" },
+                  { step: "Execution", icon: "construction" },
+                  { step: "Refinement", icon: "auto_fix_high" },
+                  { step: "Optimization", icon: "speed" },
+                  { step: "Deployment", icon: "rocket_launch" },
+                ].map((item, idx) => (
                   <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.8, delay: i * 0.2 }}
-                    className={`group ${i === 0 ? "md:border-r border-[var(--border-color)]" : ""}`}
+                    key={idx}
+                    initial={{ opacity: 0, x: 40 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.08, duration: 0.5 }}
+                    className="border-t-4 border-black py-10 flex items-center justify-between group"
                   >
-                    <Link href={work.href} className="block">
-                      {/* Image */}
-                      <div className="relative aspect-[4/3] overflow-hidden border-b border-[var(--border-color)]">
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          transition={{ duration: 0.7 }}
-                          className="w-full h-full"
-                        >
-                          <Image
-                            src={work.img}
-                            width={800}
-                            height={600}
-                            alt={work.alt}
-                            className="w-full h-full object-cover opacity-50 group-hover:opacity-90 transition-opacity duration-700"
-                          />
-                        </motion.div>
-
-                        {/* Overlay number */}
-                        <div className="absolute top-4 right-6 text-6xl font-black text-white/10 group-hover:text-[var(--neon-green)]/20 transition-colors">
-                          {work.num}
-                        </div>
-                      </div>
-
-                      {/* Info */}
-                      <div className="p-6 md:p-8 flex justify-between items-end">
-                        <div>
-                          <span className="card-tag mb-3 inline-flex">{work.tag}</span>
-                          <h3 className="text-2xl md:text-3xl font-black tracking-tight group-hover:text-[var(--neon-green)] transition-colors uppercase mt-3">
-                            {work.title}
-                          </h3>
-                        </div>
-                        <span className="text-2xl text-white/20 group-hover:text-[var(--neon-green)] transition-colors">
-                          →
-                        </span>
-                      </div>
-                    </Link>
+                    <div className="flex items-center gap-12">
+                      <span className="text-[var(--primary-fixed)] font-black text-2xl">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:translate-x-4 transition-transform group-hover:text-[var(--primary-fixed)]">
+                        {item.step}
+                      </h3>
+                    </div>
+                    <span className="material-symbols-outlined text-4xl opacity-0 group-hover:opacity-100 transition-opacity text-[var(--primary-fixed)]">
+                      {item.icon}
+                    </span>
                   </motion.div>
                 ))}
               </div>
@@ -410,116 +515,140 @@ export default function Home() {
         </section>
 
         {/* ============================================ */}
-        {/* PROCESS — Bordered step grid */}
+        {/* BOTTOM CTA — Bold statement */}
         {/* ============================================ */}
-        <section className="border-b border-[var(--border-color)]">
-          <div className="p-8 md:p-12 lg:px-16 lg:py-12 border-b border-[var(--border-color)]">
-            <TextReveal className="display-medium">THE PROCESS</TextReveal>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-6">
-            {["Discovery", "Blueprint", "Execution", "Refinement", "Optimization", "Deployment"].map((step, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.08, duration: 0.5 }}
-                className="p-6 md:p-8 border-r border-b border-[var(--border-color)] last:border-r-0 flex flex-col justify-between min-h-[180px] group hover:bg-[var(--neon-green)]/[0.03] transition-colors relative"
-              >
-                <div className="editorial-label opacity-30 group-hover:opacity-100 group-hover:text-[var(--neon-green)] transition-all">
-                  {String(idx + 1).padStart(2, "0")}
-                </div>
-                <h4 className="text-base md:text-lg font-bold tracking-tight mt-auto uppercase group-hover:text-[var(--neon-green)] transition-colors">
-                  {step}
-                </h4>
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--neon-green)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-              </motion.div>
-            ))}
+        <section className="py-32 px-8 bg-[var(--primary-container)] text-black">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="w-full md:w-2/3"
+            >
+              <h2 className="text-6xl md:text-9xl font-black tracking-[-0.05em] uppercase leading-[0.85]">
+                BUILD FAST. <br /> ZERO FRICTION.
+              </h2>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="w-full md:w-1/3 flex flex-col gap-8"
+            >
+              <p className="text-xl font-bold uppercase tracking-tight">
+                Skip the noise and build with a launch-ready team, deep
+                resources, and immediate market access from day one.
+              </p>
+              <div className="h-4 w-24 bg-black" />
+            </motion.div>
           </div>
         </section>
 
         {/* ============================================ */}
-        {/* CONTACT — Split layout */}
+        {/* CONTACT — Split layout with form */}
         {/* ============================================ */}
-        <section id="contact" className="border-b border-[var(--border-color)]">
-          <div className="flex flex-col lg:flex-row">
-            {/* Left — Big text */}
-            <div className="flex-1 p-8 md:p-12 lg:p-20 lg:border-r border-[var(--border-color)] flex flex-col justify-center">
-              <div className="mb-12">
-                <TextReveal className="display-large">BUILD</TextReveal>
-                <TextReveal className="display-large">FAST.</TextReveal>
-                <TextReveal className="display-large text-[var(--neon-green)]" delay={0.2}>ZERO</TextReveal>
-                <TextReveal className="display-large text-[var(--neon-green)]" delay={0.3}>FRICTION.</TextReveal>
-              </div>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.6 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
-                className="text-base font-medium max-w-md leading-relaxed mb-12"
-              >
-                Skip the noise and build with a launch-ready team, deep resources,
-                and immediate market access from day one.
-              </motion.p>
-
-              <div className="space-y-4 pt-6 border-t border-[var(--border-color)]">
-                <MagneticButton strength={0.2}>
-                  <a href="mailto:hello@nuestro.agency" className="block text-xl md:text-2xl font-bold hover:text-[var(--neon-green)] transition-colors tracking-wider uppercase">
-                    hello@nuestro.agency
-                  </a>
-                </MagneticButton>
-                <div className="text-sm font-mono opacity-40 text-[var(--neon-green)]">+1 (555) 000-0000</div>
+        <section id="contact" className="py-32 px-8 bg-[var(--surface)]">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16">
+            {/* Left info */}
+            <div className="md:col-span-5">
+              <TextReveal className="display-large mb-12">
+                Get in touch
+              </TextReveal>
+              <div className="space-y-8">
+                <div>
+                  <p className="editorial-label mb-2">Electronic Mail</p>
+                  <MagneticButton strength={0.2}>
+                    <a
+                      href="mailto:hello@nuestro.agency"
+                      className="text-3xl font-bold hover:text-[var(--primary-fixed)] transition-colors"
+                    >
+                      hello@nuestro.agency
+                    </a>
+                  </MagneticButton>
+                </div>
+                <div>
+                  <p className="editorial-label mb-2">Direct Line</p>
+                  <MagneticButton strength={0.2}>
+                    <a
+                      href="tel:+15550000000"
+                      className="text-3xl font-bold hover:text-[var(--primary-fixed)] transition-colors"
+                    >
+                      +1 (555) 000-0000
+                    </a>
+                  </MagneticButton>
+                </div>
+                <div className="flex gap-6 mt-12">
+                  {["Instagram", "Twitter / X", "LinkedIn"].map((s) => (
+                    <MagneticButton key={s} strength={0.3}>
+                      <a
+                        href="#"
+                        className="font-black uppercase tracking-widest hover:text-[var(--primary-fixed)] transition-colors"
+                      >
+                        {s}
+                      </a>
+                    </MagneticButton>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Right — Form */}
-            <div className="flex-1 p-8 md:p-12 lg:p-20 bg-[#050505]">
-              <div className="editorial-label mb-8 flex items-center gap-3">
-                <div className="w-6 h-[1px] bg-[var(--neon-green)]" />
-                Get in touch
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-10">
+            {/* Right form */}
+            <div className="md:col-span-7 bg-[var(--surface-container-low)] p-12 border-4 border-black">
+              <form onSubmit={handleSubmit} className="space-y-8">
                 <div>
-                  <label className="editorial-label opacity-60 mb-3 block">Name / Organization</label>
+                  <label className="block font-black uppercase text-xs tracking-widest mb-4">
+                    Name / Organization
+                  </label>
                   <input
                     name="name"
                     required
                     type="text"
-                    placeholder="JOHN DOE"
-                    className="w-full bg-transparent border-b border-white/15 pb-3 font-bold text-xl focus:outline-none focus:border-[var(--neon-green)] transition-colors text-white placeholder-white/20 uppercase"
+                    placeholder="Who are you?"
+                    className="w-full bg-[var(--surface-container-highest)] border-0 p-6 font-bold text-xl focus:ring-4 focus:ring-[var(--secondary)] transition-all outline-none text-white placeholder-white/30"
                   />
                 </div>
                 <div>
-                  <label className="editorial-label opacity-60 mb-3 block">Project Scope</label>
+                  <label className="block font-black uppercase text-xs tracking-widest mb-4">
+                    Project Scope
+                  </label>
                   <textarea
                     name="mission"
                     required
-                    placeholder="WHAT ARE WE BUILDING?"
-                    className="w-full bg-transparent border-b border-white/15 pb-3 font-bold text-xl focus:outline-none focus:border-[var(--neon-green)] transition-colors h-24 text-white placeholder-white/20 resize-none uppercase"
+                    placeholder="What are we forging?"
+                    rows={4}
+                    className="w-full bg-[var(--surface-container-highest)] border-0 p-6 font-bold text-xl focus:ring-4 focus:ring-[var(--secondary)] transition-all outline-none text-white placeholder-white/30 resize-none"
                   />
                 </div>
-
                 <MagneticButton strength={0.15}>
                   <motion.button
                     disabled={formStatus === "submitting"}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-[var(--neon-green)] text-black py-5 font-bold uppercase tracking-[0.15em] text-sm hover:bg-white transition-colors disabled:opacity-50"
+                    className="w-full bg-[var(--primary-container)] text-black border-4 border-black py-8 font-black text-2xl uppercase hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_#000000] transition-all disabled:opacity-50"
                   >
-                    {formStatus === "submitting" ? "TRANSMITTING..." : "INITIALIZE PARTNERSHIP →"}
+                    {formStatus === "submitting"
+                      ? "TRANSMITTING..."
+                      : "INITIALIZE PARTNERSHIP →"}
                   </motion.button>
                 </MagneticButton>
 
                 {formStatus === "success" && (
-                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[var(--neon-green)] text-sm text-center font-mono tracking-wider">
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-[var(--neon-green)] text-sm text-center font-mono tracking-wider"
+                  >
                     Inquiry received. We&apos;ll be in touch shortly.
                   </motion.p>
                 )}
                 {formStatus === "error" && (
-                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-500 text-sm text-center font-mono tracking-wider">
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-red-500 text-sm text-center font-mono tracking-wider"
+                  >
                     Transmission failed. Please try again.
                   </motion.p>
                 )}
@@ -530,39 +659,44 @@ export default function Home() {
       </main>
 
       {/* ============================================ */}
-      {/* FOOTER — Bordered editorial */}
+      {/* FOOTER — Brutalist editorial */}
       {/* ============================================ */}
-      <footer className="relative z-10">
-        <div className="flex flex-col md:flex-row">
-          {/* Brand */}
-          <div className="p-8 md:p-12 md:border-r border-[var(--border-color)] flex items-center">
-            <span className="text-3xl md:text-4xl font-black tracking-tight">N.</span>
+      <footer className="bg-[#131313] w-full py-20 px-8 border-t-4 border-black relative z-10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end">
+          <div className="w-full md:w-auto">
+            <div className="text-4xl font-black text-white mb-8 uppercase leading-none">
+              NUESTRO <br /> AGENCY
+            </div>
+            <p className="font-black text-[var(--primary-fixed)] uppercase tracking-[0.4em] mb-8">
+              Forging the future.
+            </p>
+            <p className="font-medium uppercase tracking-widest text-xs text-white/60">
+              ©{new Date().getFullYear()} NUESTRO AGENCY. ALL RIGHTS RESERVED.
+            </p>
           </div>
-
-          {/* Social links */}
-          <div className="flex-1 flex items-center p-8 md:p-12 gap-8">
-            {["Instagram", "Twitter / X", "LinkedIn"].map((s) => (
-              <MagneticButton key={s} strength={0.3}>
-                <a href="#" className="text-xs font-bold tracking-[0.2em] uppercase text-white/50 hover:text-[var(--neon-green)] transition-colors hover-line pb-1">
-                  {s}
+          <div className="flex flex-col md:flex-row gap-8 mt-12 md:mt-0 items-end">
+            <div className="flex gap-8 font-medium uppercase tracking-widest text-xs">
+              {["Privacy Policy", "Terms of Service"].map((link) => (
+                <a
+                  key={link}
+                  href="#"
+                  className="text-white/60 hover:text-[var(--neon-green)] transition-all active:scale-95"
+                >
+                  {link}
                 </a>
-              </MagneticButton>
-            ))}
-          </div>
-
-          {/* Tagline */}
-          <div className="p-8 md:p-12 md:border-l border-[var(--border-color)] flex items-center gap-4">
-            <div className="w-8 h-[2px] bg-[var(--neon-green)]" />
-            <span className="font-bold text-sm text-[var(--neon-green)] tracking-[0.15em] uppercase">Forging the future.</span>
-          </div>
-        </div>
-
-        <div className="border-t border-[var(--border-color)] px-8 md:px-12 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="font-mono opacity-30 text-[10px] tracking-wider">
-            © {new Date().getFullYear()} NUESTRO AGENCY. ALL RIGHTS RESERVED.
-          </div>
-          <div className="font-mono opacity-20 text-[10px] tracking-wider">
-            DESIGNED & BUILT WITH OBSESSIVE DETAIL
+              ))}
+            </div>
+            <div className="flex gap-8 font-medium uppercase tracking-widest text-xs">
+              {["LinkedIn", "Instagram"].map((link) => (
+                <a
+                  key={link}
+                  href="#"
+                  className="text-white/60 hover:text-[var(--neon-green)] transition-all active:scale-95"
+                >
+                  {link}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </footer>
